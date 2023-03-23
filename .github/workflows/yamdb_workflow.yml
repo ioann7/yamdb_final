@@ -1,9 +1,6 @@
 name: yamdb workflow
 
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
   tests:
@@ -22,14 +19,15 @@ jobs:
         pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
         pip install -r api_yamdb/requirements.txt 
 
-    - name: Test with flake8 and pytest
-      run: |
-        python -m flake8
-        python -m pytest
+    - name: Test with flake8
+      run: python -m flake8
+    - name: Test with pytest
+      run: python -m pytest
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     needs: tests
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2 
@@ -67,6 +65,7 @@ jobs:
               echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
               echo DB_HOST=${{ secrets.DB_HOST }} >> .env
               echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/yamdb_final:latest
               sudo docker compose up -d
   send_message:
     runs-on: ubuntu-latest
