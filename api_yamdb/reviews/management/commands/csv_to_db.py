@@ -20,7 +20,8 @@ class CsvToDb:
     tables will be added in this order.
     """
 
-    def parse_tables(tables: List[str], path: str) -> None:
+    @classmethod
+    def parse_tables(cls, tables: List[str], path: str) -> None:
         for table in tables:
             file_path = Path(path, f'{table}.csv')
             with open(file_path, encoding='utf-8-sig') as fp:
@@ -29,7 +30,7 @@ class CsvToDb:
                 data = [
                     {header: row[i] for i, header in enumerate(headers)}
                     for row in reader]
-                getattr(CsvToDb, f'csv_to_{table}')(data)
+                getattr(cls, f'csv_to_{table}')(data)
 
     @classmethod
     def get_avaiable_tables(cls) -> List[str]:
@@ -40,12 +41,14 @@ class CsvToDb:
                 result.append(key.replace('csv_to_', ''))
         return result
 
-    def sort_tables(tables: List[str]) -> List[str]:
-        avaiable_tables = CsvToDb.get_avaiable_tables()
+    @classmethod
+    def sort_tables(cls, tables: List[str]) -> List[str]:
+        avaiable_tables = cls.get_avaiable_tables()
         order = {table: i for i, table in enumerate(avaiable_tables)}
         return sorted(tables, key=lambda x: order.get(x, float('inf')))
 
-    def csv_to_users(data: List[Dict[str, str]]) -> None:
+    @classmethod
+    def csv_to_users(cls, data: List[Dict[str, str]]) -> None:
         for instance in data:
             user, status = User.objects.get_or_create(
                 id=instance['id'],
@@ -59,7 +62,8 @@ class CsvToDb:
             created = 'created' if status else 'not created'
             logger.info(f'User {user} is {created}')
 
-    def csv_to_category(data: List[Dict[str, str]]) -> None:
+    @classmethod
+    def csv_to_category(cls, data: List[Dict[str, str]]) -> None:
         for instance in data:
             category, status = Category.objects.get_or_create(
                 id=instance['id'],
@@ -69,7 +73,8 @@ class CsvToDb:
             created = 'created' if status else 'not created'
             logger.info(f'Category {category} is {created}')
 
-    def csv_to_genre(data: List[Dict[str, str]]) -> None:
+    @classmethod
+    def csv_to_genre(cls, data: List[Dict[str, str]]) -> None:
         for instance in data:
             genre, status = Genre.objects.get_or_create(
                 id=instance['id'],
@@ -79,7 +84,8 @@ class CsvToDb:
             created = 'created' if status else 'not created'
             logger.info(f'Genre {genre} is {created}')
 
-    def csv_to_titles(data: List[Dict[str, str]]) -> None:
+    @classmethod
+    def csv_to_titles(cls, data: List[Dict[str, str]]) -> None:
         for instance in data:
             category = Category.objects.get(pk=instance['category'])
             title, status = Title.objects.get_or_create(
@@ -91,7 +97,8 @@ class CsvToDb:
             created = 'created' if status else 'not created'
             logger.info(f'Title {title} is {created}')
 
-    def csv_to_genre_title(data: Dict[str, str]) -> bool:
+    @classmethod
+    def csv_to_genre_title(cls, data: Dict[str, str]) -> bool:
         for instance in data:
             genre = Genre.objects.get(pk=instance['genre_id'])
             title = Title.objects.get(pk=instance['title_id'])
@@ -103,7 +110,8 @@ class CsvToDb:
             created = 'created' if status else 'not created'
             logger.info(f'GenreTitle {genre_title} is {created}')
 
-    def csv_to_review(data: Dict[str, str]) -> bool:
+    @classmethod
+    def csv_to_review(cls, data: Dict[str, str]) -> bool:
         for instance in data:
             title = Title.objects.get(pk=instance['title_id'])
             author = User.objects.get(pk=instance['author'])
@@ -118,7 +126,8 @@ class CsvToDb:
             created = 'created' if status else 'not created'
             logger.info(f'Review {review} is {created}')
 
-    def csv_to_comments(data: Dict[str, str]) -> bool:
+    @classmethod
+    def csv_to_comments(cls, data: Dict[str, str]) -> bool:
         for instance in data:
             review = Review.objects.get(pk=instance['review_id'])
             author = User.objects.get(pk=instance['author'])
