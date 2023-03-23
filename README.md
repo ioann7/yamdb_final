@@ -1,4 +1,6 @@
 ![yamdb workflow](https://github.com/ioann7/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+IP проекта: 158.160.54.197
+Hostname: yatube-practicum.sytes.net
 ### Проект YaMDb
 ### Описание
 Проект YaMDb собирает отзывы (`Review`) пользователей на произведения (`Title`).
