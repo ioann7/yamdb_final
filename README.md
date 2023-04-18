@@ -1,4 +1,4 @@
-- ![yamdb workflow](https://github.com/ioann7/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+![yamdb workflow](https://github.com/ioann7/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 ### Проект YaMDb
 ### Описание
 Проект YaMDb собирает отзывы (`Review`) пользователей на произведения (`Title`).
