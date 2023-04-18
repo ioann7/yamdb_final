@@ -23,6 +23,9 @@
 - Django 3.2
 - DRF 3.12.4
 - JWT 5.2.2
+- PostgreSQL 13
+- Nginx 1.21.3
+- Yandex.Cloud
 
 Полный список в файле requirements.txt
 
